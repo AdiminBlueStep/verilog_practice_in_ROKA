@@ -4,7 +4,7 @@
 module my_and_module (a, b, c);
     /* 신호 선언부 */
   // wire, reg,, parameter 등 선언함
-  inpuut wire a, b;
+  input wire a, b;
   output wire c;
 
   /* 동작 선언부 */
