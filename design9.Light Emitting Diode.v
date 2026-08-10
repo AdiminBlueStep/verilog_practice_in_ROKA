@@ -15,3 +15,46 @@ module led_pwm (
   end
 endmodule
 
+
+//test bench
+module tb_led_pwm;
+    reg        test_clk;
+    reg  [7:0] test_duty;
+    wire       test_led_out;
+
+    // DUT(Device Under Test) 연결
+    led_pwm u_led_pwm (
+        .clk(test_clk),
+        .duty(test_duty),
+        .led_out(test_led_out)
+    );
+
+    // 5ns마다 클럭 반전 (10ns 주기 클럭)
+    always #5 test_clk = ~test_clk;
+
+    initial begin
+        $dumpfile("dump.vcd");
+        $dumpvars(0, tb_led_pwm);
+
+        test_clk = 0;
+
+        // [구간 1] Duty = 0 (0% 밝기 - 완전히 꺼짐)
+        test_duty = 8'd0;
+        #3000;
+
+        // [구간 2] Duty = 64 (25% 밝기 - 주기 중 25%만 ON)
+        test_duty = 8'd64;
+        #3000;
+
+        // [구간 3] Duty = 128 (50% 밝기 - 주기 중 절반 ON)
+        test_duty = 8'd128;
+        #3000;
+
+        // [구간 4] Duty = 255 (100% 밝기 - 사실상 계속 ON)
+        test_duty = 8'd255;
+        #3000;
+
+        $finish;
+    end
+endmodule
+
